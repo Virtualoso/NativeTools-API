@@ -25,7 +25,7 @@ static void Item$initItems()
 	// The first way we can add items is by simply using the itemId and data values of the item we want to add.
 	exampleTab1->addItem(4, 0); // this adds cobblestone to the tab.
 	// The next method is by using an Item pointer and a data value.
-	exampleTab1->addItem(testItem, 0); // adds an apple to the tab.
+	exampleTab1->addItem(testItem, 0); // adds test item to the tab.
 	// Another way to add items to the tab is with a Block pointer and data value.
 	exampleTab1->addItem(Block::mBlocks[45], 0);  // adds bricks to the tab.
 	// Finally, you can add items using ItemInstance pointers to have the most precision over the items being added.
