@@ -4,20 +4,34 @@
 #include <stdlib.h>
 #include <Substrate.h>
 
+#include "ExampleMod.h"
+
 #include "com/mojang/minecraftpe/world/item/Item.h"
 #include "com/mojang/minecraftpe/world/item/ItemInstance.h"
 #include "com/mojang/minecraftpe/world/level/block/Block.h"
-#include "CreativeTab.h"
 
-static void (*_Item$initItems)();
-static void Item$initItems()
+#include "nativetools-api/CreativeTab.h"
+#include "nativetools-api/NativeToolsItems.h"
+#include "nativetools-api/NativeTools.h"
+
+Item* ExampleMod::testItem;
+
+void ExampleMod::initItems()
 {
-	_Item$initItems();
-	
-	Item* testItem = new Item("testItem", 4000 - 256);
+	testItem = new Item("testItem", 4000 - 256);
 	testItem->setIcon("string", 0);
+	testItem->setCategory(CreativeItemCategory::ITEMS);
 	Item::mItems[4000] = testItem;
-	
+}
+
+void ExampleMod::initVanillaCreativeItems()
+{
+	if(!NativeTools::hasNativeTools())
+		Item::addCreativeItem(testItem, 0);
+}
+
+void ExampleMod::initCustomCreativeItems()
+{
 	// Our first step is to make a new CreativeTab.  There are many ways to do that as I will demonstrate below.
 	// The first method is just to use the default constructor.
 	CreativeTab* exampleTab1 = new CreativeTab(); // you can create a creative tab with no params.  This will set the default icon as a barrier.
@@ -85,9 +99,10 @@ static void Item$initItems()
 	exampleTab3->addToTabsList();
 }
 
+
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	
-	MSHookFunction((void*) &Item::initItems, (void*) &Item$initItems, (void**) &_Item$initItems);
+	new ExampleMod();
 	
 	return JNI_VERSION_1_2;
 }
